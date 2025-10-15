@@ -1,14 +1,13 @@
 build:
-	docker-compose build todo-app
-
+	docker compose build
 run:
-	docker-compose up todo-app
+	docker compose up
 
 test:
 	go test -v ./...
 
 migrate:
-	migrate -path ./schema -database 'postgres://postgres:qwerty@0.0.0.0:5436/postgres?sslmode=disable' up
+	migrate -path ./schema -database 'postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable' up
 
 swag:
 	swag init -g cmd/main.go

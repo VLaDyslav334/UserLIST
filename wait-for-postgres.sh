@@ -1,16 +1,13 @@
-#!/bin/sh
-# wait-for-postgres.sh
-
+#!/bin/bash
 set -e
 
 host="$1"
 shift
-cmd="$@"
 
-until PGPASSWORD=$DB_PASSWORD psql -h "$host" -U "postgres" -c '\q'; do
-  >&2 echo "Postgres is unavailable - sleeping"
-  sleep 1
+until pg_isready -h "$host" -U "$POSTGRES_USER" --quiet; do
+  echo "Waiting for PostgreSQL to be ready..."
+  sleep 2
 done
 
->&2 echo "Postgres is up - executing command"
-exec $cmd
+echo "PostgreSQL is ready - executing command"
+exec "$@"
