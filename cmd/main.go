@@ -80,7 +80,7 @@ func main() {
 }
 
 func initConfig() error {
-	viper.AddConfigPath("configs")
+	viper.AddConfigPath(".")
 	viper.SetConfigName("config")
 	return viper.ReadInConfig()
 }

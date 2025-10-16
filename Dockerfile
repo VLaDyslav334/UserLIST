@@ -1,23 +1,39 @@
 FROM golang:1.24.3 as builder
 
-RUN go version
-ENV GOPATH=/
+WORKDIR /app
+
+# Copy Go dependencies
+COPY go.mod go.sum ./
+
+# Download Go module dependencies
+RUN go mod download
+
+# Copy application source code
+COPY . .
+
+# Build Go app binary
+RUN go build -o main ./cmd/
+
+# Copy the config file
+COPY config.yml /app/config.yml
+
+
+# Final stage
+FROM debian:bookworm-slim
 
 WORKDIR /app
 
-COPY go.mod go.sum ./
+# Copy the binary from builder
+COPY --from=builder /app/main .
 
-# install psql
-RUN apt-get update
-RUN apt-get -y install postgresql-client
+# Copy database wait script
+COPY wait-for-postgres.sh /app/wait-for-postgres.sh
 
-## make wait-for-postgres.sh executable
-#RUN chmod +x wait-for-postgres.sh
+# Make the wait-for-postgres.sh script executable
+RUN chmod +x /app/wait-for-postgres.sh
 
-# build go app
-RUN go mod download
-RUN go build -o main ./cmd/
-
+# Expose the application port
 EXPOSE 8080
 
+# Start the application
 CMD ["./main"]
