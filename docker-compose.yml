@@ -18,6 +18,7 @@ services:
         condition: service_healthy
     ports:
       - "${APP_PORT}:8080"
+    command: ["sh", "-c", "sleep infinity"]
 
   userlist-db:
     restart: unless-stopped

@@ -15,7 +15,7 @@ COPY . .
 RUN go build -o main ./cmd/
 
 # Copy the config file
-COPY config.yml /app/config.yml
+COPY config.yml ./config.yml
 
 
 # Final stage
