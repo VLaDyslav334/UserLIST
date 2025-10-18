@@ -1,39 +1,39 @@
-version: "3.9"
+---
 
 services:
   todolist-app:
     build:
       context: ./
       dockerfile: Dockerfile
-    container_name:  todolist-app
+    container_name: todolist-app
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     networks:
-       appnet:
-         ipv4_address: 192.168.1.100
+      appnet:
+        ipv4_address: 192.168.1.100
     depends_on:
       userlist-db:
         condition: service_healthy
     ports:
       - "${APP_PORT}:8080"
-    command: ["sh", "-c", "sleep infinity"]
+    command: [ "sh", "-c", "sleep infinity" ]
 
   userlist-db:
     restart: unless-stopped
     image: postgres:18-bookworm
     container_name: userlist-db
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./database/migrations:/docker-entrypoint-initdb.d
       - ./config.yml:/app/config.yml
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -41,9 +41,9 @@ services:
       appnet:
         ipv4_address: 192.168.1.101
 
-
 volumes:
   db_data:
+
 
 networks:
   appnet:
@@ -51,4 +51,3 @@ networks:
     ipam:
       config:
         - subnet: 192.168.1.0/24
-
