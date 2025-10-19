@@ -1,18 +1,34 @@
-FROM golang:1.24.3 as builder
+# Start from the official Go image
+FROM golang:1.25.3-bookworm AS builder
 
+# Set working directory
 WORKDIR /app
 
-# Copy Go dependencies
-COPY .. .
+# Copy go.mod and go.sum files
+COPY go.mod go.sum* ./
 
-# Download Go module dependencies
-RUN go mod tidy
+# Download dependencies
+RUN go mod download
 
-# Build Go app binary
-RUN go build -o main ./cmd/
+# Copy the source code
+COPY . .
+
+# Build the application
+RUN go build -o gin-app ./cmd/main.go
+
+# Use a slim debian image for the final stage
+FROM debian:bookworm-slim
+
+# Set working directory
+WORKDIR /usr/bin/app
+
+# Copy the binary from the builder stage
+COPY --from=builder /app/gin-app .
+
+COPY --from=builder /app/config.yml .
 
 # Expose the application port
 EXPOSE 8080
 
-# Start the application
-CMD ["./main"]
+# Command to run the application
+CMD ["./gin-app"]

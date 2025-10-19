@@ -81,7 +81,7 @@ func main() {
 
 func initConfig() error {
 	viper.AddConfigPath(".")
-	viper.SetConfigName("config")
+	viper.SetConfigName("config.yml")
 	err := viper.ReadInConfig()
 	if err != nil {
 		logrus.Warnf("failed to read config file: %s", err.Error())
