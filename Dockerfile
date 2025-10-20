@@ -7,6 +7,8 @@ WORKDIR /app
 # Copy go.mod and go.sum files
 COPY go.mod go.sum* ./
 
+COPY config.yml .
+
 # Download dependencies
 RUN go mod download
 

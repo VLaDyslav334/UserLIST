@@ -17,9 +17,9 @@ import (
 	"UserLIST/todo"
 )
 
-// @title Todo App API
+// @title User List API
 // @version 1.0
-// @description API Server for TodoList Application
+// @description API Server for User List Application
 
 // @host localhost:8000
 // @BasePath /
@@ -82,6 +82,7 @@ func main() {
 func initConfig() error {
 	viper.AddConfigPath(".")
 	viper.SetConfigName("config.yml")
+
 	err := viper.ReadInConfig()
 	if err != nil {
 		logrus.Warnf("failed to read config file: %s", err.Error())
