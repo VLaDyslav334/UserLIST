@@ -1,13 +1,23 @@
-build:
-	docker compose build
-run:
-	docker compose up
+.PHONY: up down logs
 
-test:
-	go test -v ./...
+up:
+	@ docker compose up -d
 
-migrate:
-	migrate -path ./schema -database 'postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable' up
+down:
+	@ docker compose down
 
-swag:
-	swag init -g cmd/main.go
+logs:
+	@ docker compose logs -f app
+
+restart:
+	@ docker compose restart app
+
+# Проверка конфигурации
+check-env:
+	@test -n "$(HOST)" || (echo "Error: HOST is not set" && exit 1)
+	@test -n "$(POSTGRES_USER)" || (echo "Error: POSTGRES_USER is not set" && exit 1)
+	@test -n "$(POSTGRES_PASSWORD)" || (echo "Error: POSTGRES_PASSWORD is not set" && exit 1)
+	@test -n "$(POSTGRES_DB)" || (echo "Error: POSTGRES_DB is not set" && exit 1)
+	@echo "All environment variables are set correctly"
+
+deploy: check-env up

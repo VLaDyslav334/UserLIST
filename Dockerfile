@@ -7,7 +7,8 @@ WORKDIR /app
 # Copy go.mod and go.sum files
 COPY go.mod go.sum* ./
 
-COPY config.yml .
+## COPY config.yml .
+#COPY .env ./
 
 # Download dependencies
 RUN go mod download
@@ -27,7 +28,7 @@ WORKDIR /usr/bin/app
 # Copy the binary from the builder stage
 COPY --from=builder /app/gin-app .
 
-COPY --from=builder /app/config.yml .
+# COPY --from=builder /app/config.yml .
 
 # Expose the application port
 EXPOSE 8080

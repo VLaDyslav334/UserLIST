@@ -6,8 +6,10 @@ services:
       context: ./
       dockerfile: Dockerfile
     container_name: todolist-app
+    env_file:
+      - .env
     environment:
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${HOST}:5432/${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     networks:
@@ -32,7 +34,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./database/migrations:/docker-entrypoint-initdb.d
-      - ./config.yml:/app/config.yml
+      # - ./config.yml:/app/config.yml
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 5s
