@@ -25,7 +25,7 @@ func setupTestContainers(t *testing.T) (*testContainers, string) {
 	// Configure container request for Windows
 	req := testcontainers.ContainerRequest{
 		Image:        "postgres:14-alpine",
-		ExposedPorts: []string{"5432/tcp"},
+		ExposedPorts: []string{"5436/tcp"},
 		WaitingFor:   wait.ForLog("database system is ready to accept connections"),
 		Env: map[string]string{
 			"POSTGRES_DB":       os.Getenv("POSTGRES_DB"),
@@ -44,7 +44,7 @@ func setupTestContainers(t *testing.T) (*testContainers, string) {
 	// Get host and port
 	host, err := pgContainer.Host(ctx)
 	require.NoError(t, err)
-	port, err := pgContainer.MappedPort(ctx, "5432")
+	port, err := pgContainer.MappedPort(ctx, "5436")
 	require.NoError(t, err)
 
 	// Build connection string
