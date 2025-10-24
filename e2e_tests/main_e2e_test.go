@@ -53,7 +53,7 @@ func (suite *UserE2ETestSuite) SetupSuite() {
 
 	// Start PostgreSQL container with optimized settings
 	container, err := postgres.Run(ctx,
-		"postgres:15-alpine",
+		"postgres:17-bookworm",
 		postgres.WithDatabase("testdb"),
 		postgres.WithUsername("testuser"),
 		postgres.WithPassword("testpass"),

@@ -73,3 +73,5 @@ func main() {
 		logrus.Errorf("error occured on db connection close: %s", err.Error())
 	}
 }
+
+// .
