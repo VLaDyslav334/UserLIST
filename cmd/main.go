@@ -8,7 +8,6 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 
 	"UserLIST/pkg/handler"
 	"UserLIST/pkg/repository"
@@ -47,7 +46,7 @@ func main() {
 
 	srv := new(todo.Server)
 	go func() {
-		if err := srv.Run(viper.GetString("APP_PORT"), handlers.InitRoutes()); err != nil {
+		if err := srv.Run(os.Getenv("APP_PORT"), handlers.InitRoutes()); err != nil {
 			logrus.Fatalf("error occured while running http server: %s", err.Error())
 		}
 	}()
