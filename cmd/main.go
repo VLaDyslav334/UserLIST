@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"github.com/joho/godotenv"
 	"os"
 	"os/signal"
 	"syscall"
@@ -30,10 +29,6 @@ import (
 
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
-
-	if err := godotenv.Load(); err != nil {
-		logrus.Warnf("error loading .env variables: %s ", err.Error())
-	}
 
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     os.Getenv("HOST"),
