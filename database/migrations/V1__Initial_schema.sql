@@ -38,4 +38,5 @@ CREATE TABLE lists_items
     UNIQUE (item_id, list_id)
 );
 
-CREATE INDEX users_username_index users (username);
+CREATE INDEX todo_items_title_index ON todo_items (title);
+CREATE INDEX users_username_index ON users (username);
